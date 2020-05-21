@@ -9,7 +9,14 @@ import Controladores_Interfaces.IAlimentoController;
 import Logica.Categoria;
 import Logica.Fabrica;
 import Persistencia.Conexion;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.sql.Blob;
+import java.util.Base64;
 import java.util.List;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,6 +30,7 @@ public class Categorias extends javax.swing.JInternalFrame {
     List<Categoria> categorias = null;
     DefaultTableModel md; 
     Categoria cateElegida = null;
+    Blob imagen = null;
     
     public Categorias() {
         initComponents();
@@ -53,6 +61,13 @@ public class Categorias extends javax.swing.JInternalFrame {
         }
     }
     
+    private static String codificarBase64(File file) throws Exception{
+        FileInputStream fileInputStreamReader = new FileInputStream(file);
+        byte[] bytes = new byte[(int)file.length()];
+        fileInputStreamReader.read(bytes);
+        return new String(Base64.getEncoder().encode(bytes), "UTF-8");
+    }
+    
     void salir(){
         e_menu m = (e_menu) this.getTopLevelAncestor();
         m.desbloquearFondo();
@@ -75,6 +90,8 @@ public class Categorias extends javax.swing.JInternalFrame {
         tabla = new javax.swing.JTable();
         nombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        btnSubir = new javax.swing.JButton();
+        verRuta = new javax.swing.JTextField();
 
         setTitle("Categorias");
 
@@ -125,6 +142,15 @@ public class Categorias extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel1.setText("Nombre:");
 
+        btnSubir.setText("Subir Imagen");
+        btnSubir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubirActionPerformed(evt);
+            }
+        });
+
+        verRuta.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,6 +158,10 @@ public class Categorias extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSubir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(verRuta))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(34, 34, 34)
@@ -152,7 +182,11 @@ public class Categorias extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSubir)
+                    .addComponent(verRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -168,7 +202,7 @@ public class Categorias extends javax.swing.JInternalFrame {
     private void agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarActionPerformed
         try{
             String nuevaCategoria = this.nombre.getText();
-            Categoria categoria = new Categoria(nuevaCategoria);
+            Categoria categoria = new Categoria(nuevaCategoria,this.imagen);
             Conexion.getInstance().alta(categoria);
             JOptionPane.showMessageDialog(null,"Categoria agregada correctamente");
         }catch (Exception e) {
@@ -200,14 +234,31 @@ public class Categorias extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_tablaMouseClicked
 
+    private void btnSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirActionPerformed
+        try{
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Buscar imagen");
+            if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+                this.verRuta.setText(fc.getSelectedFile().getPath());
+                File imagenElejida = new File(fc.getSelectedFile().toString());
+                byte[] imagenBytes = codificarBase64(imagenElejida).getBytes();
+                Blob blobData = new SerialBlob(imagenBytes);
+                imagen = blobData;
+            }
+        }catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnSubirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregar;
+    private javax.swing.JButton btnSubir;
     private javax.swing.JButton eliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nombre;
     private javax.swing.JButton salir;
     private javax.swing.JTable tabla;
+    private javax.swing.JTextField verRuta;
     // End of variables declaration//GEN-END:variables
 }
