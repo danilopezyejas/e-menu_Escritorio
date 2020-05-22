@@ -36,6 +36,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
     List<Bebida> bebidas = null;
     List<Plato> platos = null;
     private TextAutoCompleter ac;
+    List<Categoria> categorias = null;
     
     
     public Alimentos() {
@@ -56,10 +57,10 @@ public class Alimentos extends javax.swing.JInternalFrame {
     }
     
     private void cargarCategorias(){
-        List<Categoria> categorias =  alimentoContoller.listarCategoria();
-        this.categoria.addItem("Elija una categoria");
+        categorias=  alimentoContoller.listarCategoria();
+        this.cbCategorias.addItem("Elija una categoria");
         for(Categoria aux : categorias){
-            this.categoria.addItem(aux.getNombre());
+            this.cbCategorias.addItem(aux.getNombre());
         }
     }
     
@@ -178,8 +179,8 @@ public class Alimentos extends javax.swing.JInternalFrame {
             this.tiempoPreparacion.setBorder(border);
             retorno = false;
         }
-        if(this.categoria.getSelectedIndex() == 0){
-            this.categoria.setBorder(border);
+        if(this.cbCategorias.getSelectedIndex() == 0){
+            this.cbCategorias.setBorder(border);
             retorno = false;
         }
         if(retorno)
@@ -230,6 +231,17 @@ public class Alimentos extends javax.swing.JInternalFrame {
         this.ingredientes.setText("tengo que arreglar");
         this.calorias.setText(cantidad);
     }
+    
+    Categoria devolverCategoria(int elegida){
+        int i = 1;
+        for(Categoria aux : categorias){
+            if(i == elegida){
+                return aux;
+            }
+            i++;
+        }
+        return null;
+    }
         
     void salir(){
         e_menu m = (e_menu) this.getTopLevelAncestor();
@@ -267,7 +279,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         ComboBoxTipo = new javax.swing.JComboBox<>();
         tipoTexto = new javax.swing.JLabel();
-        categoria = new javax.swing.JComboBox<>();
+        cbCategorias = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         unidad = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -417,9 +429,9 @@ public class Alimentos extends javax.swing.JInternalFrame {
         tipoTexto.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         tipoTexto.setText("Tipo");
 
-        categoria.addMouseListener(new java.awt.event.MouseAdapter() {
+        cbCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                categoriaMouseClicked(evt);
+                cbCategoriasMouseClicked(evt);
             }
         });
 
@@ -461,7 +473,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     .addComponent(jLabel5))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(categoria, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
@@ -492,7 +504,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(categoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
                     .addComponent(ComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tipoTexto))
@@ -623,7 +635,8 @@ public class Alimentos extends javax.swing.JInternalFrame {
         String caloriasSting = calorias.getText();
         String tiempoPrepString = tiempoPreparacion.getText();
         String ingred = ingredientes.getText();
-        String categoria = (String)this.categoria.getSelectedItem();
+        int categoriaElegida = this.cbCategorias.getSelectedIndex();
+        Categoria categoria = devolverCategoria(categoriaElegida);
         enum_Bebida a= enum_Bebida.Alcoholica;
         int cal,tiempoPrep,cant;
         float pre;
@@ -634,7 +647,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 pre=Float.parseFloat(preString);
                 cal=Integer.parseInt(caloriasSting);
                 tiempoPrep= Integer.parseInt(tiempoPrepString);
-                alimentoContoller.altaPlato(nom, pre, ingred,tiempoPrep,cal);       
+                alimentoContoller.altaPlato(nom, pre, ingred,tiempoPrep,cal,categoria);       
                 JOptionPane.showMessageDialog(null,"Plato agregado correctamente");
             }else{
                 //preguntar por tipo
@@ -658,7 +671,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     return;
             }
                 
-                alimentoContoller.altaBebida(nom, pre, ingred,cant,a,tiempoPrep);       
+                alimentoContoller.altaBebida(nom, pre, ingred,cant,a,tiempoPrep, categoria);       
                 JOptionPane.showMessageDialog(null,"Bebida agregada correctamente");
             }
            
@@ -719,7 +732,6 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     aModificar.setIngredientes(nuevoIngredientes);
 
     //                aModificar.setCategoria(categoria);
-
 
                     Conexion.getInstance().modificar(aModificar);
                     cargarPlatos();
@@ -798,10 +810,10 @@ public class Alimentos extends javax.swing.JInternalFrame {
         int seleccionado = tabla.getSelectedRow();
         int id = Integer.parseInt(this.tabla.getValueAt(seleccionado, 0).toString());
         if(isPlato){
-            Conexion.getInstance().baja(buscarPlato(id));
+            alimentoContoller.eliminarAlimento(buscarPlato(id));
             cargarPlatos();
         }else{
-            Conexion.getInstance().baja(buscarBebida(id));
+            alimentoContoller.eliminarAlimento(buscarBebida(id));
             cargarBebidas();
         }
         JOptionPane.showMessageDialog(null,"Se elimino correctamente.");
@@ -827,9 +839,9 @@ public class Alimentos extends javax.swing.JInternalFrame {
         this.ingredientes.setBorder(null);
     }//GEN-LAST:event_ingredientesMouseClicked
 
-    private void categoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categoriaMouseClicked
-        this.categoria.setBorder(null);
-    }//GEN-LAST:event_categoriaMouseClicked
+    private void cbCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbCategoriasMouseClicked
+        this.cbCategorias.setBorder(null);
+    }//GEN-LAST:event_cbCategoriasMouseClicked
 
     private void tablaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseEntered
         tabla.setToolTipText("Para modificar los datos seleccione uno. Si quiere modificar el precio de un conjunto seleccione mas de uno.");
@@ -877,7 +889,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
     private javax.swing.JToggleButton btnPlatos;
     private javax.swing.JTextField busqueda;
     private javax.swing.JTextPane calorias;
-    private javax.swing.JComboBox<String> categoria;
+    private javax.swing.JComboBox<String> cbCategorias;
     private javax.swing.JButton eliminar;
     private javax.swing.JTextArea ingredientes;
     private javax.swing.JLabel jLabel1;
