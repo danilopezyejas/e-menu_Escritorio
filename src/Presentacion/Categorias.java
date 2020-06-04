@@ -258,10 +258,10 @@ public class Categorias extends javax.swing.JInternalFrame {
 
     public boolean formatoCorrecto(File f) {
         String name = f.getName().toLowerCase();
-        return (name.endsWith(".png") ||
+        return ((name.endsWith(".png") ||
                         name.endsWith(".jpg") ||
                         name.endsWith(".gif") ||
-                        name.endsWith(".bmp") &&
+                        name.endsWith(".bmp")) &&
                         f.length() < tamanioMaximo);
     }
 

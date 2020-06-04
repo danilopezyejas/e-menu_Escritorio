@@ -6,6 +6,7 @@
 package Presentacion;
 
 import Controladores_Interfaces.ictrl_Pedido;
+import Hilos.ConsultaPedidos;
 import Logica.Fabrica;
 import Logica.Mesa;
 import java.awt.Container;
@@ -46,6 +47,10 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);   //Para que se ejecute maximisado 
         Atencion atencion = this;
         cargarMesas();
+        ConsultaPedidos hilo1 = new ConsultaPedidos();
+        //List<Pedidos> p = hilo1.cargarPedidosPendientes();
+        hilo1.conocerBotones(arregloBotones);
+        hilo1.start();
         
         this.addWindowListener(new WindowAdapter() {
         @Override
@@ -57,6 +62,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
                  cerrar = Atencion.DISPOSE_ON_CLOSE;
             }
                     if(cerrar != 0){
+                        hilo1.stop();
                         menuPrincipal.desbloquearFondo();
                         menuPrincipal.setVisible(true);
                         atencion.dispose();
