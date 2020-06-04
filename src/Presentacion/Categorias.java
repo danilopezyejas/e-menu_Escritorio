@@ -11,13 +11,13 @@ import Logica.Fabrica;
 import Persistencia.Conexion;
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.file.Files;
 import java.sql.Blob;
 import java.util.Base64;
 import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,6 +31,7 @@ public class Categorias extends javax.swing.JInternalFrame {
     DefaultTableModel md; 
     Categoria cateElegida = null;
     Blob imagen = null;
+    int tamanioMaximo = 3145728; //3Megas
     
     public Categorias() {
         initComponents();
@@ -206,7 +207,7 @@ public class Categorias extends javax.swing.JInternalFrame {
             Conexion.getInstance().alta(categoria);
             JOptionPane.showMessageDialog(null,"Categoria agregada correctamente");
         }catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"ERROR: "+e);
+            JOptionPane.showMessageDialog(null,"","ERROR",JOptionPane.ERROR_MESSAGE);
         }
         cargarTabla();
     }//GEN-LAST:event_agregarActionPerformed
@@ -220,7 +221,7 @@ public class Categorias extends javax.swing.JInternalFrame {
             Conexion.getInstance().baja(this.cateElegida);
             JOptionPane.showMessageDialog(null,"Categoria eliminada correctamente");
         }catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"ERROR: "+e);
+            JOptionPane.showMessageDialog(null,"","ERROR",JOptionPane.ERROR_MESSAGE);
         }
         cargarTabla();
     }//GEN-LAST:event_eliminarActionPerformed
@@ -237,18 +238,36 @@ public class Categorias extends javax.swing.JInternalFrame {
     private void btnSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirActionPerformed
         try{
             JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("FORMATO IMAGEN", "jpg", "png", "gif", "bmp");
+            fc.setFileFilter(filter);
             fc.setDialogTitle("Buscar imagen");
             if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
-                this.verRuta.setText(fc.getSelectedFile().getPath());
                 File imagenElejida = new File(fc.getSelectedFile().toString());
-                byte[] imagenBytes = codificarBase64(imagenElejida).getBytes();
-                Blob blobData = new SerialBlob(imagenBytes);
-                imagen = blobData;
+                if(formatoCorrecto(imagenElejida)){
+                    this.verRuta.setText(fc.getSelectedFile().getPath());
+                    byte[] imagenBytes = codificarBase64(imagenElejida).getBytes();
+                    Blob blobData = new SerialBlob(imagenBytes);
+                    imagen = blobData;
+                }else{
+                    JOptionPane.showMessageDialog(null,"Seleccione una imagen de hasta 3MB y con extención .pnj o .gif o .gif o .bmp","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
             }
         }catch (Exception e) {
         }
     }//GEN-LAST:event_btnSubirActionPerformed
 
+    public boolean formatoCorrecto(File f) {
+        String name = f.getName().toLowerCase();
+        return (name.endsWith(".png") ||
+                        name.endsWith(".jpg") ||
+                        name.endsWith(".gif") ||
+                        name.endsWith(".bmp") &&
+                        f.length() < tamanioMaximo);
+    }
+
+    public String getDescription() {
+        return "Images < 3mb";
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregar;
