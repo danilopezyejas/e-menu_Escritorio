@@ -89,7 +89,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
             arregloBotones[j].addActionListener(this);
             this.panel.add(arregloBotones[j]); //Lo agrego al panel si no supere las cantidad de mesas que hay
         }
-        temporizador();
+        //temporizador();
     }
     
     
