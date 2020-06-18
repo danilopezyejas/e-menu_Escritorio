@@ -83,7 +83,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         
         for(int j=0; j<arregloBotones.length; j++){
             arregloBotones[j] = new JButton();
-            ImageIcon icon = new ImageIcon("img/Mesa Libre.png");
+            ImageIcon icon = new ImageIcon("img/mesa_Libre.png");
             arregloBotones[j].setIcon(icon);                               //Creo el boton con el icono
             arregloBotones[j].setName("btnMesa"+Integer.toString(j));
             arregloBotones[j].addActionListener(this);
