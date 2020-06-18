@@ -37,12 +37,14 @@ public class Alimentos extends javax.swing.JInternalFrame {
     List<Plato> platos = null;
     private TextAutoCompleter ac;
     List<Categoria> categorias = null;
+    Resenias res;
     Long idSeleccionado;
     
     
     public Alimentos() {
         initComponents();
         this.ingredientes.setLineWrap(true);
+        res = new Resenias();
         platoController = Fabrica.getInstancia().getAlimentoController();
         alimentoContoller = Fabrica.getInstancia().getAlimentoController();
         this.platos = platoController.listarPlatos();
@@ -300,6 +302,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         unidad = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        verResenias = new javax.swing.JButton();
         btnPlatos = new javax.swing.JToggleButton();
         btnBebidas = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
@@ -459,6 +462,13 @@ public class Alimentos extends javax.swing.JInternalFrame {
 
         jLabel11.setText("min.");
 
+        verResenias.setText("Ver Reseñas");
+        verResenias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verReseniasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -473,7 +483,10 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(ComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(verResenias))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -524,8 +537,9 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
                     .addComponent(ComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tipoTexto))
-                .addGap(20, 20, 20))
+                    .addComponent(tipoTexto)
+                    .addComponent(verResenias))
+                .addGap(19, 19, 19))
         );
 
         btnPlatos.setText("Platos");
@@ -907,6 +921,14 @@ public class Alimentos extends javax.swing.JInternalFrame {
             this.nombre.transferFocus();
     }//GEN-LAST:event_caloriasKeyTyped
 
+    private void verReseniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verReseniasActionPerformed
+        
+        //panel.add(c);
+        res.setVisible(true);
+        //centrarInternal(c);
+        //bloquearFondo();        
+    }//GEN-LAST:event_verReseniasActionPerformed
+
 
     
 
@@ -945,5 +967,6 @@ public class Alimentos extends javax.swing.JInternalFrame {
     private javax.swing.JTextPane tiempoPreparacion;
     private javax.swing.JLabel tipoTexto;
     private javax.swing.JLabel unidad;
+    private javax.swing.JButton verResenias;
     // End of variables declaration//GEN-END:variables
 }
