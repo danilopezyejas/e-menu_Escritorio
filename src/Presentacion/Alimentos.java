@@ -38,9 +38,12 @@ public class Alimentos extends javax.swing.JInternalFrame {
     private TextAutoCompleter ac;
     List<Categoria> categorias = null;
     Resenias res;
+    Long idSeleccionado;
+    
     
     public Alimentos() {
         initComponents();
+        this.ingredientes.setLineWrap(true);
         res = new Resenias();
         platoController = Fabrica.getInstancia().getAlimentoController();
         alimentoContoller = Fabrica.getInstancia().getAlimentoController();
@@ -207,12 +210,14 @@ public class Alimentos extends javax.swing.JInternalFrame {
         String calorias = "";
         String demora = "";
         String cantidad = "";
+        Long id = 0L;
         for(Plato aux : this.platos){
             if(aux.getNombre().equals(this.busqueda.getText())){
                 nombre = aux.getNombre();
                 precio = Float.toString(aux.getPrecio());
                 demora = Integer.toString(aux.getTiempoPreparacion());
                 calorias = Integer.toString(aux.getCalorias());
+                id = aux.getId();
                 break;
             }
         }
@@ -223,6 +228,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 precio = Float.toString(aux.getPrecio());
                 demora = Integer.toString(aux.getTiempoPreparacion());
                 cantidad = Integer.toString(aux.getCantidad());
+                id = aux.getId();
                 break;
             }
         }
@@ -231,6 +237,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         this.tiempoPreparacion.setText(demora);
         this.ingredientes.setText("tengo que arreglar");
         this.calorias.setText(cantidad);
+        this.idSeleccionado = id;
     }
     
     Categoria devolverCategoria(int elegida){
@@ -242,6 +249,17 @@ public class Alimentos extends javax.swing.JInternalFrame {
             i++;
         }
         return null;
+    }
+    
+    void borrarCampos(){
+        this.busqueda.setText("");
+        this.nombre.setText("");
+        this.precio.setText("");
+        this.tiempoPreparacion.setText("");
+        this.calorias.setText("");
+        this.ingredientes.setText("");
+        this.ComboBoxTipo.setSelectedIndex(0);
+        this.cbCategorias.setSelectedIndex(0);
     }
         
     void salir(){
@@ -327,7 +345,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nombre", "Precio", "Demora", "Calorias", "Ingredientes", "Title 7", "Title 8"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8"
             }
         ) {
             Class[] types = new Class [] {
@@ -470,7 +488,6 @@ public class Alimentos extends javax.swing.JInternalFrame {
                         .addGap(41, 41, 41)
                         .addComponent(verResenias))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
@@ -478,7 +495,8 @@ public class Alimentos extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
-                            .addComponent(unidad))))
+                            .addComponent(unidad)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
@@ -613,7 +631,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(24, 24, 24)
-                        .addComponent(busqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(busqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnPlatos, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -662,6 +680,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 tiempoPrep= Integer.parseInt(tiempoPrepString);
                 alimentoContoller.altaPlato(nom, pre, ingred,tiempoPrep,cal,categoria);       
                 JOptionPane.showMessageDialog(null,"Plato agregado correctamente");
+                borrarCampos();
             }else{
                 //preguntar por tipo
                 pre=Integer.parseInt(preString);
@@ -686,6 +705,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 
                 alimentoContoller.altaBebida(nom, pre, ingred,cant,a,tiempoPrep, categoria);       
                 JOptionPane.showMessageDialog(null,"Bebida agregada correctamente");
+                borrarCampos();
             }
            
         }
@@ -727,12 +747,19 @@ public class Alimentos extends javax.swing.JInternalFrame {
         float suba = 0;
         int[] seleccionados = this.tabla.getSelectedRows();
         int cantSelec = seleccionados.length;
+        int id = 0;
+        
+        if(idSeleccionado != 0L){
+            id = idSeleccionado.intValue();
+            cantSelec = 1;
+        }
         
         if(cantSelec < 1){
             JOptionPane.showMessageDialog(null,"Debe seleccionar al menos un alimento.","ERROR",JOptionPane.ERROR_MESSAGE);
         }else{
             if(cantSelec == 1){  //Si selecciona solo un alimento puede modificar cualquier dato
-                int id = Integer.parseInt(this.tabla.getValueAt(seleccionados[0], 0).toString());
+                if(id == 0)
+                    id = Integer.parseInt(this.tabla.getValueAt(seleccionados[0], 0).toString());
                 if(isPlato){
                     Plato aModificar = buscarPlato(id);
                     String nuevoNombre = this.nombre.getText();
@@ -761,7 +788,6 @@ public class Alimentos extends javax.swing.JInternalFrame {
 
     //                aModificar.setCategoria(categoria);
 
-
                     Conexion.getInstance().modificar(aModificar);
                     cargarBebidas();
                 }
@@ -769,7 +795,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 porcentaje = Integer.parseInt(JOptionPane.showInputDialog("Introduzca un porcentaje (sin %): "));
                 if(isPlato){
                     for(int i = 0; i < seleccionados.length; i++ ){
-                        int id = Integer.parseInt(this.tabla.getValueAt(seleccionados[i], 0).toString());
+                        id = Integer.parseInt(this.tabla.getValueAt(seleccionados[i], 0).toString());
                         Plato aModificar = buscarPlato(id);
                         suba = aModificar.getPrecio() + (aModificar.getPrecio() * porcentaje)/100;
                         aModificar.setPrecio(suba);
@@ -778,7 +804,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     }
                 }else{
                     for(int i = 0; i < cantSelec; i++ ){
-                        int id = Integer.parseInt(this.tabla.getValueAt(seleccionados[i], 0).toString());
+                        id = Integer.parseInt(this.tabla.getValueAt(seleccionados[i], 0).toString());
                         Bebida aModificar = buscarBebida(id);
                         suba = aModificar.getPrecio() + (aModificar.getPrecio() * porcentaje)/100;
                         aModificar.setPrecio(suba);
@@ -788,33 +814,37 @@ public class Alimentos extends javax.swing.JInternalFrame {
                 }
             }
         }
+        borrarCampos();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        this.busqueda.setText("");
+        this.idSeleccionado = 0L;
+        int seleccionados = this.tabla.getSelectedRow();
+        int id = Integer.parseInt( (String)this.tabla.getValueAt(seleccionados, 0));
         if(isPlato){
-            int seleccionados = this.tabla.getSelectedRow();
-           
-            String nombre = (String) this.tabla.getValueAt(seleccionados, 1);
-            String precio = (String) this.tabla.getValueAt(seleccionados, 2);
-            String calorias = (String) this.tabla.getValueAt(seleccionados, 3);
-            String ingredientes = (String) this.tabla.getValueAt(seleccionados, 4);
-            String demora = (String) this.tabla.getValueAt(seleccionados, 5);
+            Plato plato = buscarPlato(id);
+            String nombre = plato.getNombre();
+            String precio = String.valueOf(plato.getPrecio());
+            String calorias = String.valueOf(plato.getCalorias());
+            String demora = String.valueOf(plato.getTiempoPreparacion());
+            String ingredientes = plato.getIngredientes();
             this.nombre.setText(nombre);
             this.precio.setText(precio);
             this.tiempoPreparacion.setText(demora);
-            this.ingredientes.setText("tengo que arreglar");
+            this.ingredientes.setText(ingredientes);
             this.calorias.setText(calorias);
         }else{
-            int seleccionados = this.tabla.getSelectedRow();
-           
-            String nombre = (String) this.tabla.getValueAt(seleccionados, 1);
-            String precio = (String) this.tabla.getValueAt(seleccionados, 2);
-            String demora = (String) this.tabla.getValueAt(seleccionados, 3);
-            String cantidad = (String) this.tabla.getValueAt(seleccionados, 4);
+            Bebida bebida = buscarBebida(id);
+            String nombre = bebida.getNombre();
+            String precio = String.valueOf(bebida.getPrecio());
+            String demora = String.valueOf(bebida.getTiempoPreparacion());
+            String cantidad = String.valueOf(bebida.getCantidad());
+            String ingredientes = bebida.getIngredientes();
             this.nombre.setText(nombre);
             this.precio.setText(precio);
             this.tiempoPreparacion.setText(demora);
-            this.ingredientes.setText("tengo que arreglar");
+            this.ingredientes.setText(ingredientes);
             this.calorias.setText(cantidad);
         }
     }//GEN-LAST:event_tablaMouseClicked
@@ -829,7 +859,8 @@ public class Alimentos extends javax.swing.JInternalFrame {
             alimentoContoller.eliminarAlimento(buscarBebida(id));
             cargarBebidas();
         }
-        JOptionPane.showMessageDialog(null,"Se elimino correctamente.");
+        JOptionPane.showMessageDialog(null,"Se elimino correctamente.","ELIMINAR",JOptionPane.WARNING_MESSAGE);
+        borrarCampos();
     }//GEN-LAST:event_eliminarActionPerformed
 
     private void nombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nombreMouseClicked
