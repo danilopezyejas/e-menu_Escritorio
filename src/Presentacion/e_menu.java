@@ -143,6 +143,7 @@ public class e_menu extends javax.swing.JFrame {
         btnAlimentos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnAlimentos.setForeground(new java.awt.Color(255, 255, 255));
         btnAlimentos.setText("Alimentos");
+        btnAlimentos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAlimentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlimentosActionPerformed(evt);
@@ -153,6 +154,7 @@ public class e_menu extends javax.swing.JFrame {
         btnMesa.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnMesa.setForeground(new java.awt.Color(255, 255, 255));
         btnMesa.setText("Mesa");
+        btnMesa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMesaActionPerformed(evt);
@@ -163,6 +165,7 @@ public class e_menu extends javax.swing.JFrame {
         btnPersonal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnPersonal.setForeground(new java.awt.Color(255, 255, 255));
         btnPersonal.setText("Personal");
+        btnPersonal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPersonalActionPerformed(evt);
@@ -196,7 +199,7 @@ public class e_menu extends javax.swing.JFrame {
         );
 
         btnAtender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/atender.png"))); // NOI18N
-        btnAtender.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAtender.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAtender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAtenderActionPerformed(evt);
