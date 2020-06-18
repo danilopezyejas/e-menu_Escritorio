@@ -891,9 +891,14 @@ public class Alimentos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_caloriasKeyTyped
 
     private void verReseniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verReseniasActionPerformed
-        
-        //panel.add(c);
+        salir();
+        e_menu m = (e_menu) this.getTopLevelAncestor();
+        m.ejecutarPanel(res);
         res.setVisible(true);
+        //m.desbloquearFondo();
+        //this.dispose();    
+        //panel.add(c);
+        
         //centrarInternal(c);
         //bloquearFondo();        
     }//GEN-LAST:event_verReseniasActionPerformed
