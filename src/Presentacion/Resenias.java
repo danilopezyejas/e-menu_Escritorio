@@ -45,6 +45,7 @@ public class Resenias extends javax.swing.JInternalFrame {
 
         //lleno la tabla
         for(Resenia aux : this.resenias){ 
+//            
             String datos[]={
                 String.valueOf(aux.getId()),
                 String.valueOf(aux.getPlato().getId())+"-"+aux.getPlato().getNombre(),
@@ -84,6 +85,11 @@ void salir(){
         });
 
         eliminar.setText("Eliminar");
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Reseñas");
 
@@ -150,6 +156,25 @@ void salir(){
         m.mostrarPlatos();
     }//GEN-LAST:event_SalirActionPerformed
 
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+       
+        if(tabla.getSelectedRow()!=-1){
+                int seleccionado = tabla.getSelectedRow();
+                int id = Integer.parseInt(this.tabla.getValueAt(seleccionado, 0).toString());
+                 platoController.eliminarResenia(buscarResenia(id));
+                JOptionPane.showMessageDialog(this,"Reseña eliminada correctamente");
+            }else{
+                JOptionPane.showMessageDialog(this,"Por favor seleccione una reseña");
+            }
+    }//GEN-LAST:event_eliminarActionPerformed
+public Resenia buscarResenia(int id){
+        for(Resenia aux : this.resenias){
+            if(aux.getId() == id){
+                return aux;
+            }
+        }
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Salir;
