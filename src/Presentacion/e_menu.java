@@ -132,7 +132,7 @@ public class e_menu extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Categoria");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -195,7 +195,7 @@ public class e_menu extends javax.swing.JFrame {
                 .addComponent(btnMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addContainerGap(268, Short.MAX_VALUE))
         );
 
         btnAtender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/atender.png"))); // NOI18N
@@ -221,7 +221,7 @@ public class e_menu extends javax.swing.JFrame {
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addGap(22, 548, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAtender, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
@@ -253,11 +253,13 @@ public class e_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMesaActionPerformed
 
     private void btnAlimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlimentosActionPerformed
+        mostrarPlatos();
+    }//GEN-LAST:event_btnAlimentosActionPerformed
+    public void mostrarPlatos(){
         Alimentos apl = new Alimentos();
         this.apl = apl;
         ejecutarPanel(apl);
-    }//GEN-LAST:event_btnAlimentosActionPerformed
-
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Categorias c = new Categorias();
         ejecutarPanel(c);
@@ -270,7 +272,7 @@ public class e_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPersonalActionPerformed
 
     
-    void ejecutarPanel(javax.swing.JInternalFrame obj){
+    public void ejecutarPanel(javax.swing.JInternalFrame obj){
         panel.add(obj);
         obj.setVisible(true);
         centrarInternal(obj);
