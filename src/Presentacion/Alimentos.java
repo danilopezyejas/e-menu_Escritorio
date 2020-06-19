@@ -44,7 +44,6 @@ public class Alimentos extends javax.swing.JInternalFrame {
     public Alimentos() {
         initComponents();
         this.ingredientes.setLineWrap(true);
-        res = new Resenias();
         platoController = Fabrica.getInstancia().getAlimentoController();
         alimentoContoller = Fabrica.getInstancia().getAlimentoController();
         this.platos = platoController.listarPlatos();
@@ -922,16 +921,23 @@ public class Alimentos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_caloriasKeyTyped
 
     private void verReseniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verReseniasActionPerformed
-        salir();
-        e_menu m = (e_menu) this.getTopLevelAncestor();
-        m.ejecutarPanel(res);
-        res.setVisible(true);
-        //m.desbloquearFondo();
-        //this.dispose();    
-        //panel.add(c);
-        
-        //centrarInternal(c);
-        //bloquearFondo();        
+        if(isPlato){
+            if(tabla.getSelectedRow()!=-1){
+                int seleccionado = tabla.getSelectedRow();
+                int id = Integer.parseInt(this.tabla.getValueAt(seleccionado, 0).toString());
+
+                    res = new Resenias(id);
+                    salir();
+                    e_menu m = (e_menu) this.getTopLevelAncestor();
+                    m.ejecutarPanel(res);
+                    res.setVisible(true);
+
+            }else{
+                JOptionPane.showMessageDialog(this,"Por favor seleccione un plato");
+            }
+        }else{
+                JOptionPane.showMessageDialog(this,"Las bebidas no tienen comentarios, por favor seleccione un plato");
+            }
     }//GEN-LAST:event_verReseniasActionPerformed
 
 

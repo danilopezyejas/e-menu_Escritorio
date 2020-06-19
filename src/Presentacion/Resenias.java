@@ -9,6 +9,7 @@ import Controladores_Interfaces.IAlimentoController;
 import Logica.Fabrica;
 import Logica.Resenia;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,23 +24,37 @@ public class Resenias extends javax.swing.JInternalFrame {
     /**
      * Creates new form Resenias
      */
-    public Resenias() {
+    public Resenias(int plato) {
         initComponents();
-        platoController = Fabrica.getInstancia().getAlimentoController();
-        this.resenias = platoController.listarResenias();
-        String columnas[]={"Id","Autor","Descripcion","Fecha"};
+        
+        String columnas[]={"Id","Plato","Descripcion","Autor","Fecha"};
         md = new DefaultTableModel(data,columnas);
         tabla.setModel(md);
+        
+        platoController = Fabrica.getInstancia().getAlimentoController();
+        //this.reseniasAux = platoController.listarResenias();
+        this.resenias = platoController.listarResenias(plato);
+        
+        
+        if(this.resenias==null||this.resenias.size()<=0){
+            JOptionPane.showMessageDialog(this,"Este plato no tiene reseñas");
+            salir();
+            //return;
+            //muestro mensaje de que on hay reseñas
+        }
+
         //lleno la tabla
         for(Resenia aux : this.resenias){ 
             String datos[]={
                 String.valueOf(aux.getId()),
-                String.valueOf(aux.getAutor()),
+                String.valueOf(aux.getPlato().getId())+"-"+aux.getPlato().getNombre(),
                 String.valueOf(aux.getDescipcion()),
+                String.valueOf(aux.getAutor()),
                 String.valueOf(aux.getFecha_hora())
             };
             md.addRow(datos);
         }
+        
     }
 void salir(){
         e_menu m = (e_menu) this.getTopLevelAncestor();
@@ -82,7 +97,15 @@ void salir(){
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tabla);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
