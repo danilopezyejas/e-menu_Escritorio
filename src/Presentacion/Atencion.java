@@ -129,7 +129,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
                         JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);  
                     }
                 }else{
-                    JOptionPane.showMessageDialog(null, "No hay pedidos en esta mesa.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No hay pedidos pendientes en esta mesa.", "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
