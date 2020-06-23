@@ -161,7 +161,8 @@ void salir(){
         if(tabla.getSelectedRow()!=-1){
                 int seleccionado = tabla.getSelectedRow();
                 int id = Integer.parseInt(this.tabla.getValueAt(seleccionado, 0).toString());
-                 platoController.eliminarResenia(buscarResenia(id));
+                platoController.eliminarResenia(buscarResenia(id));
+                ((DefaultTableModel)this.tabla.getModel()).removeRow(tabla.getSelectedRow());
                 JOptionPane.showMessageDialog(this,"Reseña eliminada correctamente");
             }else{
                 JOptionPane.showMessageDialog(this,"Por favor seleccione una reseña");
