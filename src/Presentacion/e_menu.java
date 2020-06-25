@@ -9,6 +9,7 @@ import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 public class e_menu extends javax.swing.JFrame {
 
@@ -20,8 +21,9 @@ public class e_menu extends javax.swing.JFrame {
     
     public e_menu() {
         initComponents();
-        this.setLocationRelativeTo(null);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(null); 
+        //ESTO LO DESCOMENTE 
+        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconImage(new ImageIcon(getClass().getResource("/img/e_menu.png")).getImage());
         ajustarIconos();
     }
@@ -287,13 +289,15 @@ public class e_menu extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+        try {          
+            UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+            
+            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
+            }*/
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(e_menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
