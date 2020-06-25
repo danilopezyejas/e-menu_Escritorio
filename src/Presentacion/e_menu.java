@@ -35,23 +35,9 @@ public class e_menu extends javax.swing.JFrame {
         Icon subicono = new ImageIcon(subimagen.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
         Icon subicono1 = new ImageIcon(subimagen1.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
         Icon subicono2 = new ImageIcon(subimagen2.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
-        
-//        btnAltaPersonal.setIcon(subicono);
-//        btnConsultaPersonal.setIcon(subicono1);
-//        btnBajaPersonal.setIcon(subicono2);
-        //
-        //Iconos Alimentos
         ImageIcon subimagen4 = new ImageIcon("src/iconos/ic_assignment_turned_in_black_48dp.png");
-//        ImageIcon subimagen5 = new ImageIcon("src/iconos/ic_assignment_late_black_48dp.png");
-//        ImageIcon subimagen6 = new ImageIcon("src/iconos/ic_bookmark_border_black_48dp.png");   
         Icon subicono4 = new ImageIcon(subimagen4.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
-//        Icon subicono5 = new ImageIcon(subimagen5.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
-//        Icon subicono6 = new ImageIcon(subimagen6.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
-//        btnBajaAlimento.setIcon(subicono6);
-//        btnAltaAlimento.setIcon(subicono4);
-//        btnConsultaAlimento.setIcon(subicono5);
         btnAlimentos.setIcon(subicono4);
-        //
         //Iconos Mesa
         ImageIcon subimagen7 = new ImageIcon("src/iconos/ic_queue_play_next_black_48dp.png");
         ImageIcon subimagen8 = new ImageIcon("src/iconos/ic_apps_black_48dp.png");
@@ -59,10 +45,6 @@ public class e_menu extends javax.swing.JFrame {
         Icon subicono7 = new ImageIcon(subimagen7.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
         Icon subicono8 = new ImageIcon(subimagen8.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
         Icon subicono9 = new ImageIcon(subimagen9.getImage().getScaledInstance(escalaIconos,escalaIconos,Image.SCALE_DEFAULT));
-//        btnAltaMesa.setIcon(subicono7);
-//        btnConsultaMesa.setIcon(subicono8);
-//        btnBajaMesa.setIcon(subicono9);
-        //
         
         this.repaint();
         
