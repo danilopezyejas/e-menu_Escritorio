@@ -14,6 +14,7 @@ import Logica.Mesa;
 import Logica.Pedidos;
 import Logica.Personal;
 import Logica.enum_Estado;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -52,7 +53,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/img/e_menu.png")).getImage());
         this.setLocationRelativeTo(null);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);   //Para que se ejecute maximisado 
+        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);   //Para que se ejecute maximisado 
         Atencion atencion = this;
         cargarMesas();
         ConsultaPedidos hilo1 = new ConsultaPedidos();
@@ -92,7 +93,8 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         for(int j=0; j<arregloBotones.length; j++){
             arregloBotones[j] = new JButton();
             ImageIcon icon = new ImageIcon("img/mesa_Libre.png");
-            arregloBotones[j].setIcon(icon);                               //Creo el boton con el icono
+            arregloBotones[j].setIcon(icon);                              //Creo el boton con el icono
+            arregloBotones[j].setBackground(Color.white);
             arregloBotones[j].setName("btnMesa"+Integer.toString(j+1));
             arregloBotones[j].addActionListener(this);
             this.panel.add(arregloBotones[j]); //Lo agrego al panel si no supere las cantidad de mesas que hay
@@ -183,7 +185,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 96, Short.MAX_VALUE)
+            .addGap(0, 732, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
