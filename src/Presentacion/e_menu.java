@@ -123,9 +123,9 @@ public class e_menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panel.setBackground(new java.awt.Color(255, 0, 51));
+        panel.setBackground(new java.awt.Color(219, 44, 70));
 
-        pnlMenu.setBackground(new java.awt.Color(255, 0, 51));
+        pnlMenu.setBackground(new java.awt.Color(219, 44, 70));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/elbar.png"))); // NOI18N
