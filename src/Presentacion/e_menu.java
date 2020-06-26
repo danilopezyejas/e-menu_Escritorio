@@ -5,6 +5,7 @@
  */
 package Presentacion;
 
+import java.awt.Color;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -307,6 +308,10 @@ public class e_menu extends javax.swing.JFrame {
         obj.setVisible(true);
         centrarInternal(obj);
         bloquearFondo();
+    }
+    public void cambiarColor(Color nuevo){
+        panel.setBackground(nuevo);
+        pnlMenu.setBackground(nuevo);
     }
     /**
      * @param args the command line arguments

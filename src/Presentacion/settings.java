@@ -5,12 +5,14 @@
  */
 package Presentacion;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class settings extends javax.swing.JInternalFrame {
     int tamanioMaximo = 3145728; //3Megas
     File nuevaImagen=null;
+    Color nuevoColor=null;
     /**
      * Creates new form settings
      */
@@ -48,6 +51,8 @@ public class settings extends javax.swing.JInternalFrame {
         verRuta = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         save = new javax.swing.JToggleButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         exit.setText("Salir");
         exit.addActionListener(new java.awt.event.ActionListener() {
@@ -79,6 +84,16 @@ public class settings extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel3.setText("Color de fondo");
+
+        jButton1.setText("Cambiar Color");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,6 +113,8 @@ public class settings extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSubir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -116,7 +133,11 @@ public class settings extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSubir)
                     .addComponent(verRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 240, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(exit)
                     .addComponent(save))
@@ -150,6 +171,7 @@ public class settings extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSubirActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        Boolean ok=false;
         if(this.nuevaImagen!=null){
             BufferedImage image;      
             try {
@@ -158,14 +180,32 @@ public class settings extends javax.swing.JInternalFrame {
                 if(name.endsWith(".png")){
                    ImageIO.write(image, "png",new File("src/img/principal.png"));
                 }                         
-                return;
-                //perdon por tantos if
+                ok=true;
             } catch (IOException ex) {
                 Logger.getLogger(settings.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        JOptionPane.showMessageDialog(this,"Configurado con exito");
+        if(this.nuevoColor!=null){
+            e_menu m = (e_menu) this.getTopLevelAncestor();
+            m.cambiarColor(this.nuevoColor);
+            ok=true;
+        }
+        if(ok==true){
+            JOptionPane.showMessageDialog(this,"Configurado con exito");
+        }else{
+            JOptionPane.showMessageDialog(this,"No hay cambios"); 
+        }
     }//GEN-LAST:event_saveActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Color newColor = JColorChooser.showDialog(
+                     this,
+                     "Elige el nuevo color de fondo",
+                     this.getBackground());
+                if(newColor != null){
+                    this.nuevoColor=newColor;
+                }
+    }//GEN-LAST:event_jButton1ActionPerformed
     public boolean formatoCorrecto(File f) {
         String name = f.getName().toLowerCase();
         return (name.endsWith(".png")&&f.length() < tamanioMaximo);
@@ -174,8 +214,10 @@ public class settings extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSubir;
     private javax.swing.JButton exit;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JToggleButton save;
     private javax.swing.JTextField verRuta;
     // End of variables declaration//GEN-END:variables
