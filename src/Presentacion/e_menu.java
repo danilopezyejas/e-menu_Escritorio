@@ -5,6 +5,7 @@
  */
 package Presentacion;
 
+import java.awt.Cursor;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
