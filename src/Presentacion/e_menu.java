@@ -6,6 +6,7 @@
 package Presentacion;
 
 import java.awt.Cursor;
+import java.awt.Color;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -16,17 +17,45 @@ public class e_menu extends javax.swing.JFrame {
 
     Mesas am = null;
     Personal_Vistas ap = null;
+    settings set = null;
     Alimentos apl = null;
     Atencion atender = null;
     
     
     public e_menu() {
-        initComponents();
+        initComponents();       
         this.setLocationRelativeTo(null); 
         //ESTO LO DESCOMENTE 
         //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setIconoPrincipal();
         setIconImage(new ImageIcon(getClass().getResource("/img/e_menu.png")).getImage());
         ajustarIconos();
+    }
+    public void setIconoPrincipal(){
+        ImageIcon fot = new javax.swing.ImageIcon(getClass().getResource("/img/principal.png"));
+        int max = 200;                      //tamaño maximo en pixeles
+        int alto = fot.getIconHeight();
+        int ancho = fot.getIconWidth();
+        
+        if(ancho>alto){  //caso 2
+            float porcentaje;
+            porcentaje=(int)((max*100)/ancho);
+            ancho=max;
+            alto=(int)((porcentaje*0.01f)*alto);
+        }else if(alto>ancho){   //caso 3
+            max+=50;
+            float porcentaje;
+            porcentaje=(int)((max*100)/alto);
+            alto=max;
+            ancho=(int)((porcentaje*0.01f)*ancho);
+        }else{
+            alto=max-30;
+            ancho=max-30;
+        }
+            
+
+        Icon icono = new ImageIcon(fot.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+        jLabel2.setIcon(icono);
     }
      public void ajustarIconos(){
         int escalaIconos = 25;
@@ -63,6 +92,7 @@ public class e_menu extends javax.swing.JFrame {
     public void bloquearFondo() {
         btnMesa.setEnabled(false);
         btnPersonal.setEnabled(false);
+        jButton2.setEnabled(false);
         btnAlimentos.setEnabled(false);
         pnlMenu.setVisible(false);
     }
@@ -72,6 +102,7 @@ public class e_menu extends javax.swing.JFrame {
         btnPersonal.setEnabled(true);
         btnAlimentos.setEnabled(true);
         pnlMenu.setVisible(true);
+        jButton2.setEnabled(true);
     }
 
     /**
@@ -92,6 +123,7 @@ public class e_menu extends javax.swing.JFrame {
         btnMesa = new javax.swing.JButton();
         btnPersonal = new javax.swing.JButton();
         btnAtender = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -106,9 +138,9 @@ public class e_menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panel.setBackground(new java.awt.Color(219, 44, 70));
+        panel.setBackground(new java.awt.Color(255, 0, 51));
 
-        pnlMenu.setBackground(new java.awt.Color(219, 44, 70));
+        pnlMenu.setBackground(new java.awt.Color(255, 0, 51));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/elbar.png"))); // NOI18N
@@ -128,7 +160,6 @@ public class e_menu extends javax.swing.JFrame {
         btnAlimentos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnAlimentos.setForeground(new java.awt.Color(255, 255, 255));
         btnAlimentos.setText("Alimentos");
-        btnAlimentos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAlimentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlimentosActionPerformed(evt);
@@ -139,7 +170,6 @@ public class e_menu extends javax.swing.JFrame {
         btnMesa.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnMesa.setForeground(new java.awt.Color(255, 255, 255));
         btnMesa.setText("Mesa");
-        btnMesa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMesaActionPerformed(evt);
@@ -150,7 +180,6 @@ public class e_menu extends javax.swing.JFrame {
         btnPersonal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnPersonal.setForeground(new java.awt.Color(255, 255, 255));
         btnPersonal.setText("Personal");
-        btnPersonal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPersonalActionPerformed(evt);
@@ -184,10 +213,18 @@ public class e_menu extends javax.swing.JFrame {
         );
 
         btnAtender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/atender.png"))); // NOI18N
-        btnAtender.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAtender.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAtender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAtenderActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(0, 153, 153));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -199,14 +236,18 @@ public class e_menu extends javax.swing.JFrame {
                 .addContainerGap(456, Short.MAX_VALUE)
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
-                .addComponent(btnAtender, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAtender, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAtender, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
@@ -256,12 +297,22 @@ public class e_menu extends javax.swing.JFrame {
         ejecutarPanel(ap);
     }//GEN-LAST:event_btnPersonalActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        settings set = new settings();
+        this.set = set;
+        ejecutarPanel(set);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     
     public void ejecutarPanel(javax.swing.JInternalFrame obj){
         panel.add(obj);
         obj.setVisible(true);
         centrarInternal(obj);
         bloquearFondo();
+    }
+    public void cambiarColor(Color nuevo){
+        panel.setBackground(nuevo);
+        pnlMenu.setBackground(nuevo);
     }
     /**
      * @param args the command line arguments
@@ -306,6 +357,7 @@ public class e_menu extends javax.swing.JFrame {
     private javax.swing.JButton btnMesa;
     private javax.swing.JButton btnPersonal;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panel;
