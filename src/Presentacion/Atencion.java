@@ -109,8 +109,8 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         JButton b = (JButton)e.getSource();
         for(int i=0; i<panel.getComponentCount();i++){
             if(b.getName().equals(this.arregloBotones[i].getName())){
-                Long id = Long.parseLong(b.getName().replace("btnMesa", ""));
-                Pedidos pedido = controladorPedido.obtenerUltimoPedidoPorMesa(id);
+                int nromesa = Integer.parseInt(b.getName().replace("btnMesa", ""));
+                Pedidos pedido = controladorPedido.obtenerUltimoPedidoPendientePorMesa(nromesa);
                 if(pedido != null){
                     String mensaje = "Información del pedido: \n";
                     //recorro todos los alimentos del pedido 
@@ -124,14 +124,24 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
 
                     int result = JOptionPane.showConfirmDialog(null, mensaje + "\n¿Quiere tomar el pedido?");
                     if( result==JOptionPane.OK_OPTION){
-                        String ciPersonal = JOptionPane.showInputDialog("Ingrese su documento de identidad");
-                        Personal mozo = controladorPersonal.buscarPersonal(ciPersonal);
+                        int idPersonal = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su número de ID"));
+                        Personal mozo = controladorPersonal.buscarPersonalPorId(idPersonal);
                         pedido.setPersonal(mozo);
                         pedido.setEstado(enum_Estado.Activo);
                         JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);  
                     }
                 }else{
-                    JOptionPane.showMessageDialog(null, "No hay pedidos pendientes en esta mesa.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    pedido = controladorPedido.obtenerUltimoPedidoSinPagarPorMesa(nromesa);
+                    if (pedido != null){
+                        int result = JOptionPane.showConfirmDialog(null,"\n¿Quiere finalizar esta pedido?");
+                        if( result==JOptionPane.OK_OPTION){
+                            pedido.setEstado(enum_Estado.Finalizado);
+                            JOptionPane.showMessageDialog(new Frame(),"Pedido finalizado.","Información",JOptionPane.INFORMATION_MESSAGE);  
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "No hay pedidos pendientes en esta mesa.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
         }
