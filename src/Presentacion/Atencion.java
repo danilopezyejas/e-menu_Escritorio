@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -38,7 +39,10 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
     static int velocidad = 1;
     static int cerrar = Atencion.DO_NOTHING_ON_CLOSE;;
     boolean cambiar = false;
+    boolean setearImagenArregloBotones = true;
     JButton[] arregloBotones;
+                ConsultaPedidos hilo1 = new ConsultaPedidos();
+
     
     public Atencion() {
 
@@ -51,10 +55,10 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         //this.setExtendedState(JFrame.MAXIMIZED_BOTH);   //Para que se ejecute maximisado 
         Atencion atencion = this;
         cargarMesas();
-        ConsultaPedidos hilo1 = new ConsultaPedidos();
-        //List<Pedidos> p = hilo1.cargarPedidosPendientes();
-        hilo1.conocerBotones(arregloBotones);
-        hilo1.start();
+//        ConsultaPedidos hilo1 = new ConsultaPedidos();
+//        //List<Pedidos> p = hilo1.cargarPedidosPendientes();
+//        hilo1.conocerBotones(arregloBotones);
+//        hilo1.start();
         
         this.addWindowListener(new WindowAdapter() {
         @Override
@@ -87,13 +91,12 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         
         for(int j=0; j<arregloBotones.length; j++){
             arregloBotones[j] = new JButton();
-            ImageIcon icon = new ImageIcon("img/mesa_Libre.png");
-            arregloBotones[j].setIcon(icon);                              //Creo el boton con el icono
             arregloBotones[j].setBackground(Color.white);
             arregloBotones[j].setName("btnMesa"+Integer.toString(j+1));
             arregloBotones[j].addActionListener(this);
-            this.panel.add(arregloBotones[j]); //Lo agrego al panel si no supere las cantidad de mesas que hay
+            this.panel.add(arregloBotones[j]); //Lo agrego al panel si no supere las cantidad de mesas que hay                              //Creo el boton con el icono
         }
+        
         //temporizador();
     }
     
@@ -185,6 +188,13 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         panel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -205,11 +215,25 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        // TODO add your handling code here:
+        if (setearImagenArregloBotones == true){
+            for(int j=0; j<arregloBotones.length; j++){
+                ImageIcon icon = new ImageIcon (new ImageIcon("img/mesa_Libre.png").getImage().getScaledInstance(arregloBotones[j].getHeight()-20, arregloBotones[j].getHeight()-20, Image.SCALE_DEFAULT));
+                arregloBotones[j].setIcon(icon);                              //Creo el boton con el icono
+            }
+        //List<Pedidos> p = hilo1.cargarPedidosPendientes();
+        hilo1.conocerBotones(arregloBotones);
+        hilo1.start();
+            setearImagenArregloBotones = false;
+        }
+    }//GEN-LAST:event_formWindowGainedFocus
 
     void ejecutarPanel(javax.swing.JInternalFrame obj){
         this.panel.add(obj);
