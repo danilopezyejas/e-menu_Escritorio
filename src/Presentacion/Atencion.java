@@ -108,8 +108,9 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         for(int i=0; i<arregloBotones.length;i++){
             if(b.getName().equals(this.arregloBotones[i].getName())){
                 int nromesa = Integer.parseInt(b.getName().replace("btnMesa", ""));
-                Pedidos pedido = controladorPedido.obtenerUltimoPedidoPendientePorMesa(nromesa);
-                if(pedido != null){
+                Pedidos pedidoapagar = null;
+                List <Pedidos> pedido = controladorPedido.obtenerListaPedidosPendientesPorMesa(nromesa);
+                if(!pedido.isEmpty()){
                     
                     Pedido p = new Pedido(pedido);
                     //this.setVisible(false);
@@ -133,11 +134,11 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
 //                        JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);  
 //                    }
                 }else{
-                    pedido = controladorPedido.obtenerUltimoPedidoSinPagarPorMesa(nromesa);
-                    if (pedido != null){
+                    pedidoapagar = controladorPedido.obtenerUltimoPedidoSinPagarPorMesa(nromesa);
+                    if (pedidoapagar != null && pedidoapagar.getEstado().equals(enum_Estado.Pagar)){
                         int result = JOptionPane.showConfirmDialog(null,"\n¿Quiere finalizar esta pedido?");
                         if( result==JOptionPane.OK_OPTION){
-                            pedido.setEstado(enum_Estado.Finalizado);
+                            pedidoapagar.setEstado(enum_Estado.Finalizado);
                             JOptionPane.showMessageDialog(new Frame(),"Pedido finalizado.","Información",JOptionPane.INFORMATION_MESSAGE);  
                         }
                     }

@@ -13,6 +13,7 @@ import Logica.Observaciones;
 import Logica.Pedidos;
 import Logica.Personal;
 import Logica.enum_Estado;
+import Persistencia.Conexion;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -35,37 +37,44 @@ public class Pedido extends javax.swing.JFrame{
     /**
      * Creates new form Pedido
      */    
+    EntityManager em = Conexion.getInstance().getEntity();
     ictrl_Pedido controladorPedido = Fabrica.getInstancia().getPedidoController();
     IPersonalController controladorPersonal = Fabrica.getInstancia().getPersonaController();
-    Pedidos pedido = null;
+    List<Pedidos> lpedido = null;
     
     public Pedido() {
         initComponents();
     }
     
-    public Pedido(Pedidos p) {
+    public Pedido(List<Pedidos> lp) {
         initComponents();
         this.setLocationRelativeTo(null);
-        pedido = p;
-        List<Observaciones> obs = controladorPedido.obtenerObservacionesPorPedido(p.getId().intValue());
+        lpedido = lp;
+        
+        
         String data[][]={};
-        String columnas[]={"Cantidad","Nombre", "Observaciones"};
-        DefaultTableModel md = new DefaultTableModel(data,columnas);
-        tablaPedido.setModel(md);
-        for (int j = 0; j < p.getAlimento().size(); j++) {
-            Alimento alimento = (Alimento) p.getAlimento().get(j);
-            Integer cantidad;
-            int key = alimento.getId().intValue();
-            cantidad = p.getAlimentos_cantidad().get(key);
-            for (int k = 0; k < obs.size(); k++) {
-                Observaciones o = (Observaciones) obs.get(k);
-                if (o.getAlimento().getId() == alimento.getId()){
-                    String datos[]={String.valueOf(cantidad),
-                        alimento.getNombre(),
-                        o.getObservacion()
-                    };
-                    md.addRow(datos);
-                } 
+            String columnas[]={"Cantidad","Nombre", "Observaciones"};
+            DefaultTableModel md = new DefaultTableModel(data,columnas);
+            tablaPedido.setModel(md);
+            
+        for (int i=0; i<lp.size(); i++){
+            Pedidos p = lp.get(i);
+            List<Observaciones> obs = controladorPedido.obtenerObservacionesPorPedido(p.getId().intValue());
+            for (int j = 0; j < p.getAlimento().size(); j++) {
+                Alimento alimento = (Alimento) p.getAlimento().get(j);
+                Integer cantidad;
+                int key = alimento.getId().intValue();
+                cantidad = p.getAlimentos_cantidad().get(key);
+                for (int k = 0; k < obs.size(); k++) {
+                    Observaciones o = (Observaciones) obs.get(k);
+                    if (o.getAlimento().getId() == alimento.getId()){
+                        String datos[]={String.valueOf(cantidad),
+                            alimento.getNombre(),
+                            o.getObservacion()
+                        };
+                        md.addRow(datos);
+                    } 
+                }
             }
         }
 //        
@@ -92,6 +101,7 @@ public class Pedido extends javax.swing.JFrame{
         tablaPedido = new javax.swing.JTable();
         buttonTomarPedido = new javax.swing.JButton();
         buttonSalir = new javax.swing.JButton();
+        buttonfinalizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,6 +155,13 @@ public class Pedido extends javax.swing.JFrame{
             }
         });
 
+        buttonfinalizar.setText("Finalizar");
+        buttonfinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonfinalizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -158,7 +175,9 @@ public class Pedido extends javax.swing.JFrame{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(buttonSalir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonfinalizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonTomarPedido))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
@@ -173,7 +192,8 @@ public class Pedido extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonTomarPedido)
-                    .addComponent(buttonSalir))
+                    .addComponent(buttonSalir)
+                    .addComponent(buttonfinalizar))
                 .addContainerGap())
         );
 
@@ -203,15 +223,38 @@ public class Pedido extends javax.swing.JFrame{
 
     private void buttonTomarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTomarPedidoActionPerformed
         int idPersonal = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su número de ID"));
-        Personal mozo = controladorPersonal.buscarPersonalPorId(idPersonal);
-        pedido.setPersonal(mozo);
-        pedido.setEstado(enum_Estado.Activo);
-        JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);
+        Personal mozo = null;
+        mozo = controladorPersonal.buscarPersonalPorId(idPersonal);
+        if ( mozo == null || mozo.getId() != idPersonal){
+            JOptionPane.showMessageDialog(new Frame(),"No se encontró personal, por favor verifíquelo.","Información",JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            for (int i=0; i<lpedido.size(); i++){
+                Pedidos aux = lpedido.get(i);
+                aux.setPersonal(mozo);
+                aux.setEstado(enum_Estado.Activo);
+                em.merge(aux);
+            }
+            JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);
+            JButton b = (JButton)evt.getSource();
+            ImageIcon icon = new ImageIcon (new ImageIcon("img/mesa_Atendida.png").getImage().getScaledInstance(b.getHeight()-20, b.getHeight()-20, Image.SCALE_DEFAULT));
+            b.setIcon(icon);
+            this.dispose();
+        }
+    }//GEN-LAST:event_buttonTomarPedidoActionPerformed
+
+    private void buttonfinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonfinalizarActionPerformed
+        // TODO add your handling code here:
+        for (int i=0; i<lpedido.size(); i++){
+            Pedidos aux = lpedido.get(i);
+            aux.setEstado(enum_Estado.Finalizado);
+            em.merge(aux);
+        }
+        JOptionPane.showMessageDialog(new Frame(),"Usted finalizó el pedido","Información",JOptionPane.INFORMATION_MESSAGE);
         JButton b = (JButton)evt.getSource();
-        ImageIcon icon = new ImageIcon (new ImageIcon("img/mesa_Atendida.png").getImage().getScaledInstance(b.getHeight()-20, b.getHeight()-20, Image.SCALE_DEFAULT));
+        ImageIcon icon = new ImageIcon (new ImageIcon("img/mesa_Libre.png").getImage().getScaledInstance(b.getHeight()-20, b.getHeight()-20, Image.SCALE_DEFAULT));
         b.setIcon(icon);
         this.dispose();
-    }//GEN-LAST:event_buttonTomarPedidoActionPerformed
+    }//GEN-LAST:event_buttonfinalizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,6 +294,7 @@ public class Pedido extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonSalir;
     private javax.swing.JButton buttonTomarPedido;
+    private javax.swing.JButton buttonfinalizar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
