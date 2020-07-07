@@ -130,7 +130,7 @@ public class settings extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSubir)
                     .addComponent(verRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -191,7 +191,7 @@ public class settings extends javax.swing.JInternalFrame {
             ok=true;
         }
         if(ok==true){
-            JOptionPane.showMessageDialog(this,"Configurado con exito");
+            JOptionPane.showMessageDialog(this,"Configurado con exito,algunos cambios se veran al reiniciar el programa");
         }else{
             JOptionPane.showMessageDialog(this,"No hay cambios"); 
         }
