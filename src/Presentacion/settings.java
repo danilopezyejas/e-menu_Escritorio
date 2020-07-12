@@ -24,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class settings extends javax.swing.JInternalFrame {
     int tamanioMaximo = 3145728; //3Megas
     File nuevaImagen=null;
+    File nuevaImagen2=null;
     Color nuevoColor=null;
     /**
      * Creates new form settings
@@ -53,6 +54,9 @@ public class settings extends javax.swing.JInternalFrame {
         save = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        btnSubir1 = new javax.swing.JButton();
+        verRuta1 = new javax.swing.JTextField();
 
         exit.setText("Salir");
         exit.addActionListener(new java.awt.event.ActionListener() {
@@ -94,6 +98,19 @@ public class settings extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel4.setText("Logo Atender");
+
+        btnSubir1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSubir1.setText("Subir Imagen");
+        btnSubir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubir1ActionPerformed(evt);
+            }
+        });
+
+        verRuta1.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,6 +130,11 @@ public class settings extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSubir1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(verRuta1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4)
                     .addComponent(jButton1)
                     .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
@@ -133,11 +155,17 @@ public class settings extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSubir)
                     .addComponent(verRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSubir1)
+                    .addComponent(verRuta1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(exit)
                     .addComponent(save))
@@ -154,7 +182,7 @@ public class settings extends javax.swing.JInternalFrame {
     private void btnSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirActionPerformed
         try{
             JFileChooser fc = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("FORMATO IMAGEN", "jpg", "png", "gif", "bmp");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("FORMATO IMAGEN","png");
             fc.setFileFilter(filter);
             fc.setDialogTitle("Buscar imagen");
             if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
@@ -179,8 +207,25 @@ public class settings extends javax.swing.JInternalFrame {
                 String name = this.nuevaImagen.getName().toLowerCase();
                 if(name.endsWith(".png")){
                    ImageIO.write(image, "png",new File("src/img/principal.png"));
+                }   
+                e_menu m = (e_menu) this.getTopLevelAncestor();
+                m.setIconoPrincipal();
+                ok=true;
+            } catch (IOException ex) {
+                Logger.getLogger(settings.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if(this.nuevaImagen2!=null){
+            BufferedImage image;      
+            try {
+                image = ImageIO.read(this.nuevaImagen2);
+                String name = this.nuevaImagen2.getName().toLowerCase();
+                if(name.endsWith(".png")){
+                   ImageIO.write(image, "png",new File("src/img/secundaria.png"));
                 }                         
                 ok=true;
+                e_menu m = (e_menu) this.getTopLevelAncestor();
+                m.setIconoAtender();
             } catch (IOException ex) {
                 Logger.getLogger(settings.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -206,6 +251,25 @@ public class settings extends javax.swing.JInternalFrame {
                     this.nuevoColor=newColor;
                 }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnSubir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubir1ActionPerformed
+        try{
+            JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("FORMATO IMAGEN", "png");
+            fc.setFileFilter(filter);
+            fc.setDialogTitle("Buscar imagen");
+            if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+                File imagenElejida = new File(fc.getSelectedFile().toString());
+                if(formatoCorrecto(imagenElejida)){
+                    this.verRuta1.setText(fc.getSelectedFile().getPath());
+                    this.nuevaImagen2=imagenElejida;
+                }else{
+                    JOptionPane.showMessageDialog(null,"Seleccione una imagen de hasta 3MB y con extención .png","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnSubir1ActionPerformed
     public boolean formatoCorrecto(File f) {
         String name = f.getName().toLowerCase();
         return (name.endsWith(".png")&&f.length() < tamanioMaximo);
@@ -213,12 +277,15 @@ public class settings extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSubir;
+    private javax.swing.JButton btnSubir1;
     private javax.swing.JButton exit;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JToggleButton save;
     private javax.swing.JTextField verRuta;
+    private javax.swing.JTextField verRuta1;
     // End of variables declaration//GEN-END:variables
 }

@@ -34,6 +34,7 @@ public class e_menu extends javax.swing.JFrame {
         //ESTO LO DESCOMENTE 
         //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconoPrincipal();
+        setIconoAtender();
         setIconImage(new ImageIcon(getClass().getResource("/img/e_menu.png")).getImage());
         ajustarIconos();
         crearArchivoConfiguracion();
@@ -63,6 +64,32 @@ public class e_menu extends javax.swing.JFrame {
 
         Icon icono = new ImageIcon(fot.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
         jLabel2.setIcon(icono);
+    }
+    public void setIconoAtender(){
+        ImageIcon fot = new javax.swing.ImageIcon(getClass().getResource("/img/secundaria.png"));
+        int max = 200;                      //tamaño maximo en pixeles
+        int alto = fot.getIconHeight();
+        int ancho = fot.getIconWidth();
+        
+        if(ancho>alto){  //caso 2
+            float porcentaje;
+            porcentaje=(int)((max*100)/ancho);
+            ancho=max;
+            alto=(int)((porcentaje*0.01f)*alto);
+        }else if(alto>ancho){   //caso 3
+            max+=50;
+            float porcentaje;
+            porcentaje=(int)((max*100)/alto);
+            alto=max;
+            ancho=(int)((porcentaje*0.01f)*ancho);
+        }else{
+            alto=max-30;
+            ancho=max-30;
+        }
+            
+
+        Icon icono = new ImageIcon(fot.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+        btnAtender.setIcon(icono);
     }
      public void ajustarIconos(){
         int escalaIconos = 25;
