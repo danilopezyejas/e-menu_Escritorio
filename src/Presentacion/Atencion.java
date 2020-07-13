@@ -8,11 +8,9 @@ package Presentacion;
 import Controladores_Interfaces.IPersonalController;
 import Controladores_Interfaces.ictrl_Pedido;
 import Hilos.ConsultaPedidos;
-import Logica.Alimento;
 import Logica.Fabrica;
 import Logica.Mesa;
 import Logica.Pedidos;
-import Logica.Personal;
 import Logica.enum_Estado;
 import java.awt.Color;
 import java.awt.Container;
@@ -22,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,7 +39,6 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
     static int velocidad = 1;
     static int cerrar = Atencion.DO_NOTHING_ON_CLOSE;;
     boolean cambiar = false;
-    Pedido p = null;
     JButton[] arregloBotones;
     
     public Atencion() {
@@ -53,7 +49,7 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/img/e_menu.png")).getImage());
         this.setLocationRelativeTo(null);
-        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);   //Para que se ejecute maximisado 
+//        this.setExtendedState(JFrame.MAXIMIZED_BOTH);   //Para que se ejecute maximisado 
         Atencion atencion = this;
         cargarMesas();
         ConsultaPedidos hilo1 = new ConsultaPedidos();
@@ -107,31 +103,45 @@ public class Atencion extends javax.swing.JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e){
         JButton b = (JButton)e.getSource();
-        for(int i=0; i<panel.getComponentCount();i++){
+        for(int i=0; i<arregloBotones.length;i++){
             if(b.getName().equals(this.arregloBotones[i].getName())){
-                Long id = Long.parseLong(b.getName().replace("btnMesa", ""));
-                Pedidos pedido = controladorPedido.obtenerUltimoPedidoPorMesa(id);
+                int nromesa = Integer.parseInt(b.getName().replace("btnMesa", ""));
+                Pedidos pedido = controladorPedido.obtenerUltimoPedidoPendientePorMesa(nromesa);
                 if(pedido != null){
-                    String mensaje = "Información del pedido: \n";
-                    //recorro todos los alimentos del pedido 
-                    for (int j = 0; j < pedido.getAlimento().size(); j++) {
-                        Alimento alimento = (Alimento) pedido.getAlimento().get(j);
-                        Integer cantidad;
-                        int key = alimento.getId().intValue();
-                        cantidad = pedido.getAlimentos_cantidad().get(key);
-                        mensaje += cantidad + "|" + alimento.getNombre() + "\n";
-                    }
-
-                    int result = JOptionPane.showConfirmDialog(null, mensaje + "\n¿Quiere tomar el pedido?");
-                    if( result==JOptionPane.OK_OPTION){
-                        String ciPersonal = JOptionPane.showInputDialog("Ingrese su documento de identidad");
-                        Personal mozo = controladorPersonal.buscarPersonal(ciPersonal);
-                        pedido.setPersonal(mozo);
-                        pedido.setEstado(enum_Estado.Activo);
-                        JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);  
-                    }
+                    
+                    Pedido p = new Pedido(pedido);
+                    //this.setVisible(false);
+                    p.setVisible(true);
+//                    String mensaje = "Información del pedido: \n";
+//                    //recorro todos los alimentos del pedido 
+//                    for (int j = 0; j < pedido.getAlimento().size(); j++) {
+//                        Alimento alimento = (Alimento) pedido.getAlimento().get(j);
+//                        Integer cantidad;
+//                        int key = alimento.getId().intValue();
+//                        cantidad = pedido.getAlimentos_cantidad().get(key);
+//                        mensaje += cantidad + "|" + alimento.getNombre() + "\n";
+//                    }
+//
+//                    int result = JOptionPane.showConfirmDialog(null, mensaje + "\n¿Quiere tomar el pedido?");
+//                    if( result==JOptionPane.OK_OPTION){
+//                        int idPersonal = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su número de ID"));
+//                        Personal mozo = controladorPersonal.buscarPersonalPorId(idPersonal);
+//                        pedido.setPersonal(mozo);
+//                        pedido.setEstado(enum_Estado.Activo);
+//                        JOptionPane.showMessageDialog(new Frame(),"Usted ha tomado el pedido!","Información",JOptionPane.INFORMATION_MESSAGE);  
+//                    }
                 }else{
-                    JOptionPane.showMessageDialog(null, "No hay pedidos pendientes en esta mesa.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    pedido = controladorPedido.obtenerUltimoPedidoSinPagarPorMesa(nromesa);
+                    if (pedido != null){
+                        int result = JOptionPane.showConfirmDialog(null,"\n¿Quiere finalizar esta pedido?");
+                        if( result==JOptionPane.OK_OPTION){
+                            pedido.setEstado(enum_Estado.Finalizado);
+                            JOptionPane.showMessageDialog(new Frame(),"Pedido finalizado.","Información",JOptionPane.INFORMATION_MESSAGE);  
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "No hay pedidos pendientes en esta mesa.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
         }

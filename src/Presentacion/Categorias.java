@@ -14,8 +14,6 @@ import java.io.FileInputStream;
 import java.sql.Blob;
 import java.util.Base64;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -360,7 +358,7 @@ public class Categorias extends javax.swing.JInternalFrame {
     private void btnSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirActionPerformed
         try{
             JFileChooser fc = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("FORMATO IMAGEN", "jpg", "png", "gif", "bmp");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("FORMATO IMAGEN", "jpg", "jpeg", "png", "gif", "bmp");
             fc.setFileFilter(filter);
             fc.setDialogTitle("Buscar imagen");
             if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
@@ -396,6 +394,7 @@ public class Categorias extends javax.swing.JInternalFrame {
         String name = f.getName().toLowerCase();
         return ((name.endsWith(".png") ||
                         name.endsWith(".jpg") ||
+                        name.endsWith(".jpeg") ||
                         name.endsWith(".gif") ||
                         name.endsWith(".bmp")) &&
                         f.length() < tamanioMaximo);

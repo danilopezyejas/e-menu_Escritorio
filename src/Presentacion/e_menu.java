@@ -5,9 +5,11 @@
  */
 package Presentacion;
 
-import java.awt.Cursor;
 import java.awt.Color;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,16 +22,19 @@ public class e_menu extends javax.swing.JFrame {
     settings set = null;
     Alimentos apl = null;
     Atencion atender = null;
-    
+    File archivo=null;
+    FileInputStream entrada;
+    FileOutputStream salida;
     
     public e_menu() {
         initComponents();       
         this.setLocationRelativeTo(null); 
         //ESTO LO DESCOMENTE 
-        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconoPrincipal();
         setIconImage(new ImageIcon(getClass().getResource("/img/e_menu.png")).getImage());
         ajustarIconos();
+        crearArchivoConfiguracion();
     }
     public void setIconoPrincipal(){
         ImageIcon fot = new javax.swing.ImageIcon(getClass().getResource("/img/principal.png"));
@@ -310,9 +315,60 @@ public class e_menu extends javax.swing.JFrame {
         centrarInternal(obj);
         bloquearFondo();
     }
-    public void cambiarColor(Color nuevo){
+    public String GuardarArchivo(File archivo,String documento){
+        String mensaje=null;
+        try{
+            salida=new FileOutputStream(archivo);
+            byte[] bytxt=documento.getBytes();
+            salida.write(bytxt);
+            mensaje="Archivo guardado";
+        }catch(Exception e){
+        
+        }
+        return mensaje;
+    }
+    private void crearArchivoConfiguracion() {
+        archivo =new File("preferences.txt");
+        try{
+        if (archivo.createNewFile()) {
+            cambiarColor(new java.awt.Color(255, 0, 51));
+        } else {
+            cambiarColor(leerArchivo(archivo));
+        }
+        }catch(Exception e){
+        
+        }
+    }
+    public void cambiarColor(Color nuevo) {
+        GuardarArchivo(archivo,
+                String.valueOf(nuevo.getRed())+"-"+
+                String.valueOf(nuevo.getGreen())+"-"+
+                String.valueOf(nuevo.getBlue())+
+                "/"
+        );
+       
         panel.setBackground(nuevo);
         pnlMenu.setBackground(nuevo);
+    }
+    public Color leerArchivo(File arch){
+        String documento="";
+        try{
+            entrada = new FileInputStream(arch);
+            int ascci;
+            while((ascci=entrada.read())!=-1){
+                char caracter=(char)ascci;
+                documento+=caracter;
+            }
+        }catch(Exception e){
+            
+        }
+        String[] colorFondo=documento.split("/");
+        String[] cadaColor=colorFondo[0].split("-");
+        int r=Integer.parseInt(cadaColor[0]);
+        int g=Integer.parseInt(cadaColor[1]);
+        int b=Integer.parseInt(cadaColor[2]);
+        //System.out.println(documento);
+        return new java.awt.Color(r, g, b);
     }
     /**
      * @param args the command line arguments
@@ -350,6 +406,7 @@ public class e_menu extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlimentos;
@@ -363,4 +420,6 @@ public class e_menu extends javax.swing.JFrame {
     private javax.swing.JPanel panel;
     private javax.swing.JPanel pnlMenu;
     // End of variables declaration//GEN-END:variables
+
+    
 }
