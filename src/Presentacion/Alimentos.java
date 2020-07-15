@@ -167,11 +167,11 @@ public class Alimentos extends javax.swing.JInternalFrame {
             this.nombre.setBorder(border);
             retorno = false;
         }
-        if(this.precio.getText().isEmpty()){
+        if(this.precio.getText().isEmpty() || !isInt(this.precio.getText())){
             this.precio.setBorder(border);
             retorno = false;
         }
-        if(this.calorias.getText().isEmpty()){
+        if(this.calorias.getText().isEmpty() || !isInt(this.calorias.getText())){
             this.calorias.setBorder(border);
             retorno = false;
         }
@@ -179,7 +179,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
             this.ingredientes.setBorder(border);
             retorno = false;
         }
-        if(this.tiempoPreparacion.getText().isEmpty()){
+        if(this.tiempoPreparacion.getText().isEmpty() || !isInt(this.tiempoPreparacion.getText())){
             this.tiempoPreparacion.setBorder(border);
             retorno = false;
         }
@@ -197,10 +197,12 @@ public class Alimentos extends javax.swing.JInternalFrame {
         ac = new TextAutoCompleter(this.busqueda);
 
         for(Plato aux : this.listaPlatos){
-            ac.addItem(aux.getNombre());
+            if(!aux.isBorrada())
+                ac.addItem(aux.getNombre());
         }
         for(Bebida aux : this.listaBebidas){
-            ac.addItem(aux.getNombre());
+            if(!aux.isBorrada())
+                ac.addItem(aux.getNombre());
         }
     }
     
@@ -210,6 +212,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         String calorias = "";
         String demora = "";
         String cantidad = "";
+        String ingrediente = "";
         Long id = 0L;
         for(Plato aux : this.listaPlatos){
             if(!aux.isBorrada()){
@@ -219,6 +222,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
                     demora = Integer.toString(aux.getTiempoPreparacion());
                     calorias = Integer.toString(aux.getCalorias());
                     id = aux.getId();
+                    ingrediente = aux.getIngredientes();
                     break;
                 }
             }
@@ -240,7 +244,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         this.nombre.setText(nombre);
         this.precio.setText(precio);
         this.tiempoPreparacion.setText(demora);
-        this.ingredientes.setText("tengo que arreglar");
+        this.ingredientes.setText(ingrediente);
         this.calorias.setText(cantidad);
         this.idSeleccionado = id;
     }
@@ -265,6 +269,15 @@ public class Alimentos extends javax.swing.JInternalFrame {
         this.ingredientes.setText("");
         this.ComboBoxTipo.setSelectedIndex(0);
         this.cbCategorias.setSelectedIndex(0);
+    }
+    
+    public boolean isInt(String s){
+        try{
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException ex){
+            return false;
+        }
     }
         
     void salir(){

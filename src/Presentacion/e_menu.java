@@ -125,10 +125,11 @@ public class e_menu extends javax.swing.JFrame {
     public void bloquearFondo() {
         btnMesa.setEnabled(false);
         btnPersonal.setEnabled(false);
-        jButton2.setEnabled(false);
+        btnConfiguracion.setEnabled(false);
         btnAlimentos.setEnabled(false);
         pnlMenu.setVisible(false);
         btnAtender.setVisible(false);
+        btnConfiguracion.setVisible(false);
     }
     
     public void desbloquearFondo() {
@@ -136,8 +137,9 @@ public class e_menu extends javax.swing.JFrame {
         btnPersonal.setEnabled(true);
         btnAlimentos.setEnabled(true);
         pnlMenu.setVisible(true);
-        jButton2.setEnabled(true);
+        btnConfiguracion.setEnabled(true);
         btnAtender.setVisible(true);
+        btnConfiguracion.setVisible(true);
     }
 
     /**
@@ -158,7 +160,7 @@ public class e_menu extends javax.swing.JFrame {
         btnMesa = new javax.swing.JButton();
         btnPersonal = new javax.swing.JButton();
         btnAtender = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnConfiguracion = new javax.swing.JButton();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -255,11 +257,11 @@ public class e_menu extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(0, 153, 153));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnConfiguracion.setBackground(new java.awt.Color(0, 153, 153));
+        btnConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/settings.png"))); // NOI18N
+        btnConfiguracion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnConfiguracionActionPerformed(evt);
             }
         });
 
@@ -273,7 +275,7 @@ public class e_menu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAtender, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnConfiguracion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
         panelLayout.setVerticalGroup(
@@ -281,7 +283,7 @@ public class e_menu extends javax.swing.JFrame {
             .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(btnConfiguracion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAtender, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
@@ -332,11 +334,11 @@ public class e_menu extends javax.swing.JFrame {
         ejecutarPanel(ap);
     }//GEN-LAST:event_btnPersonalActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiguracionActionPerformed
         settings set = new settings();
         this.set = set;
         ejecutarPanel(set);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnConfiguracionActionPerformed
 
     
     public void ejecutarPanel(javax.swing.JInternalFrame obj){
@@ -441,10 +443,10 @@ public class e_menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlimentos;
     private javax.swing.JButton btnAtender;
+    private javax.swing.JButton btnConfiguracion;
     private javax.swing.JButton btnMesa;
     private javax.swing.JButton btnPersonal;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panel;
