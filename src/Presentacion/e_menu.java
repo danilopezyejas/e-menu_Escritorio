@@ -128,6 +128,7 @@ public class e_menu extends javax.swing.JFrame {
         jButton2.setEnabled(false);
         btnAlimentos.setEnabled(false);
         pnlMenu.setVisible(false);
+        btnAtender.setVisible(false);
     }
     
     public void desbloquearFondo() {
@@ -136,6 +137,7 @@ public class e_menu extends javax.swing.JFrame {
         btnAlimentos.setEnabled(true);
         pnlMenu.setVisible(true);
         jButton2.setEnabled(true);
+        btnAtender.setVisible(true);
     }
 
     /**

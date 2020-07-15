@@ -6,6 +6,7 @@
 package Presentacion;
 
 import Controladores_Interfaces.IAlimentoController;
+import Logica.Alimento;
 import Logica.Bebida;
 import Logica.Categoria;
 import Logica.Fabrica;
@@ -33,8 +34,8 @@ public class Alimentos extends javax.swing.JInternalFrame {
     IAlimentoController platoController;
     DefaultTableModel md; 
     String data[][]={};
-    List<Bebida> bebidas = null;
-    List<Plato> platos = null;
+    List<Bebida> listaBebidas = null;
+    List<Plato> listaPlatos = null;
     private TextAutoCompleter ac;
     List<Categoria> categorias = null;
     Resenias res;
@@ -46,8 +47,8 @@ public class Alimentos extends javax.swing.JInternalFrame {
         this.ingredientes.setLineWrap(true);
         platoController = Fabrica.getInstancia().getAlimentoController();
         alimentoContoller = Fabrica.getInstancia().getAlimentoController();
-        this.platos = platoController.listarPlatos();
-        this.bebidas = platoController.listarBebidas();
+        this.listaPlatos = platoController.listarPlatos();
+        this.listaBebidas = platoController.listarBebidas();
         cargarCategorias();
         cargarBusqueda();
         if(isPlato){
@@ -68,7 +69,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
     }
     
     private void cargarPlatos(){
-        this.platos = platoController.listarPlatos();
+        this.listaPlatos = platoController.listarPlatos();
         this.setTitle("Platos");
         tipoTexto.setVisible(false);        //ocultar tipo bebida
         ComboBoxTipo.setVisible(false);     //ocultar tipo bebida
@@ -76,7 +77,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         unidad.setText("kcal.");
         isPlato = true;
   //Le doy formato a la tabla
-        String columnas[]={"Id","Nombre","Precio $","Demora min.","Activo","Calorias kcal."};
+        String columnas[]={"Id","Nombre","Precio $","Demora min.","Calorias kcal."};
         md = new DefaultTableModel(data,columnas);
         tabla.setModel(md);
         int anchoTabla = (int)tabla.getPreferredSize().getWidth();
@@ -85,25 +86,25 @@ public class Alimentos extends javax.swing.JInternalFrame {
         tcm.getColumn(1).setPreferredWidth(anchoTabla-180);
         tcm.getColumn(2).setPreferredWidth(30);
         tcm.getColumn(3).setPreferredWidth(60);
-        tcm.getColumn(4).setPreferredWidth(20);
-        tcm.getColumn(5).setPreferredWidth(60);
+        tcm.getColumn(4).setPreferredWidth(60);
  //Fin del formato
         tabla.setColumnModel(tcm);
         //lleno la tabla
-        for(Plato aux : this.platos){ 
-            String datos[]={String.valueOf(aux.getId()),
-                aux.getNombre(),
-                String.valueOf(aux.getPrecio()),
-                String.valueOf(aux.getTiempoPreparacion()),
-                String.valueOf(aux.isActivo()),
-                String.valueOf(aux.getCalorias())
-            };
-            md.addRow(datos);
+        for(Plato aux : this.listaPlatos){
+            if(!aux.isBorrada()){
+                String datos[]={String.valueOf(aux.getId()),
+                    aux.getNombre(),
+                    String.valueOf(aux.getPrecio()),
+                    String.valueOf(aux.getTiempoPreparacion()),
+                    String.valueOf(aux.getCalorias())
+                };
+                md.addRow(datos);
+            }
         }
     }
     
     private void cargarBebidas(){ 
-        this.bebidas = platoController.listarBebidas();
+        this.listaBebidas = platoController.listarBebidas();
         this.setTitle("Bebidas");
         tipoTexto.setVisible(true);    //muestro tipo bebida
         ComboBoxTipo.setVisible(true); //muestro tipo bebida
@@ -114,7 +115,7 @@ public class Alimentos extends javax.swing.JInternalFrame {
         ComboBoxTipo.addItem("Analcoholica");
         ComboBoxTipo.addItem("Elaboracion propia");   
 //Le doy formato a la tabla
-        String columnas[]={"Id","Nombre","Precio $","Demora min.","Contenido","Activo","Tipo"};
+        String columnas[]={"Id","Nombre","Precio $","Demora min.","Contenido","Tipo"};
         md = new DefaultTableModel(data,columnas);
         tabla.setModel(md);
         int anchoTabla = (int)tabla.getPreferredSize().getWidth();
@@ -124,36 +125,36 @@ public class Alimentos extends javax.swing.JInternalFrame {
         tcm.getColumn(2).setPreferredWidth(40);
         tcm.getColumn(3).setPreferredWidth(60);
         tcm.getColumn(4).setPreferredWidth(60);
-        tcm.getColumn(5).setPreferredWidth(20);
-        tcm.getColumn(6).setPreferredWidth(60);
+        tcm.getColumn(5).setPreferredWidth(60);
  //Fin del formato
         tabla.setColumnModel(tcm);
         //lleno la tabla
-        for(Bebida aux : this.bebidas){ 
-            String datos[]={String.valueOf(aux.getId()),
-                aux.getNombre(),
-                String.valueOf(aux.getPrecio()),
-                String.valueOf(aux.getTiempoPreparacion()),
-                String.valueOf(aux.getCantidad()),
-                String.valueOf(aux.isActivo()),
-                String.valueOf(aux.getTipo())
-            };
-            md.addRow(datos);
+        for(Bebida aux : this.listaBebidas){
+            if(!aux.isBorrada()){ 
+                String datos[]={String.valueOf(aux.getId()),
+                    aux.getNombre(),
+                    String.valueOf(aux.getPrecio()),
+                    String.valueOf(aux.getTiempoPreparacion()),
+                    String.valueOf(aux.getCantidad()),
+                    String.valueOf(aux.getTipo())
+                };
+                md.addRow(datos);
+            }
         }
     }
     
     public Plato buscarPlato(int id){
-        for(Plato aux : this.platos){
+        for(Plato aux : this.listaPlatos){
             if(aux.getId() == id){
-                return aux;
+                return (Plato)aux;
             }
         }
         return null;
     }
     public Bebida buscarBebida(int id){
-        for(Bebida aux : this.bebidas){
+        for(Bebida aux : this.listaBebidas){
             if(aux.getId() == id){
-                return aux;
+                return (Bebida)aux;
             }
         }
         return null;
@@ -195,10 +196,10 @@ public class Alimentos extends javax.swing.JInternalFrame {
     void cargarBusqueda(){
         ac = new TextAutoCompleter(this.busqueda);
 
-        for(Bebida aux : this.bebidas){
+        for(Plato aux : this.listaPlatos){
             ac.addItem(aux.getNombre());
         }
-        for(Plato aux : this.platos){
+        for(Bebida aux : this.listaBebidas){
             ac.addItem(aux.getNombre());
         }
     }
@@ -210,25 +211,30 @@ public class Alimentos extends javax.swing.JInternalFrame {
         String demora = "";
         String cantidad = "";
         Long id = 0L;
-        for(Plato aux : this.platos){
-            if(aux.getNombre().equals(this.busqueda.getText())){
-                nombre = aux.getNombre();
-                precio = Float.toString(aux.getPrecio());
-                demora = Integer.toString(aux.getTiempoPreparacion());
-                calorias = Integer.toString(aux.getCalorias());
-                id = aux.getId();
-                break;
+        for(Plato aux : this.listaPlatos){
+            if(!aux.isBorrada()){
+                if(aux.getNombre().equals(this.busqueda.getText())){
+                    nombre = aux.getNombre();
+                    precio = Float.toString(aux.getPrecio());
+                    demora = Integer.toString(aux.getTiempoPreparacion());
+                    calorias = Integer.toString(aux.getCalorias());
+                    id = aux.getId();
+                    break;
+                }
             }
         }
         this.calorias.setText(calorias);
-         for(Bebida aux : this.bebidas){
-            if(aux.getNombre().equals(this.busqueda.getText())){
-                nombre = aux.getNombre();
-                precio = Float.toString(aux.getPrecio());
-                demora = Integer.toString(aux.getTiempoPreparacion());
-                cantidad = Integer.toString(aux.getCantidad());
-                id = aux.getId();
-                break;
+         for(Bebida aux : this.listaBebidas){
+            if(!aux.isBorrada()){
+                Bebida auxBebida = (Bebida)aux;
+                if(aux.getNombre().equals(this.busqueda.getText())){
+                    nombre = aux.getNombre();
+                    precio = Float.toString(auxBebida.getPrecio());
+                    demora = Integer.toString(auxBebida.getTiempoPreparacion());
+                    cantidad = Integer.toString(auxBebida.getCantidad());
+                    id = auxBebida.getId();
+                    break;
+                }
             }
         }
         this.nombre.setText(nombre);

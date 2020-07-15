@@ -330,7 +330,7 @@ public class Categorias extends javax.swing.JInternalFrame {
 
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
         try{
-            Conexion.getInstance().baja(this.cateElegida);
+            alimentoController.eliminarCategoria(this.cateElegida);
             JOptionPane.showMessageDialog(null,"Categoria eliminada correctamente","ELIMINAR",JOptionPane.WARNING_MESSAGE);
         }catch (Error ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);

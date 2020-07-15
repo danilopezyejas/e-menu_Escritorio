@@ -37,7 +37,7 @@ public class Mesas extends javax.swing.JInternalFrame {
     private static final int qrTamAlto = 4000;
     private static final String formato = "png";
     private static final String ruta = "../qr/CodigoQR_Mesa_";
-    private static final String pagina = "www.e-menu.com.uy/";
+    private static final String pagina = "http://192.168.43.74:8080/e-menuWeb/inicio?mesa=";
     DefaultTableModel md; 
     ictrl_Pedido controladorPedido = Fabrica.getInstancia().getPedidoController();
     List<Mesa> mesas;
